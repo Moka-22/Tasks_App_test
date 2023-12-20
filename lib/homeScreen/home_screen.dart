@@ -32,20 +32,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     super.initState();
   }
-
   // filter item
+  List filteredTasks = [];
   List get filteredTaskList {
     if (_searchController.text.isEmpty) {
-      return db.taskList;
+      filteredTasks = List.from(db.taskList);
+      return filteredTasks;
     } else {
-      return db.taskList
+      return filteredTasks = db.taskList
           .where((task) => task[0]
               .toLowerCase()
               .contains(_searchController.text.toLowerCase()))
           .toList();
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,8 +176,9 @@ class _HomeScreenState extends State<HomeScreen> {
   // delete Task
   void deleteTask(int index) {
     setState(() {
-      db.taskList.removeAt(index);
+      filteredTaskList.removeAt(index);
     });
+    db.taskList.remove(filteredTaskList[index]);
     db.updateDataBase();
   }
 }
